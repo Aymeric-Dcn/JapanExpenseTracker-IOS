@@ -24,6 +24,7 @@ struct ContentView: View {
                         Text("Total spent: \(manager.totalSpent, specifier: "%.0f") ¥")
                             .font(.subheadline)
                     }
+                
                     .padding()
                     
                     // Title
@@ -43,8 +44,12 @@ struct ContentView: View {
                         ExpenseListView()
                     }
                     
+                    NavigationLink("Weekly Expenses") {
+                        WeeklyExpensesView()
+                    }
+
                     NavigationLink("Statistics") {
-                        Text("Stats")
+                        StatsView()
                     }
                     
                 }

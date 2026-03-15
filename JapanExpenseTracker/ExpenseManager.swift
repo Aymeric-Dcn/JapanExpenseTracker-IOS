@@ -85,5 +85,22 @@ class ExpenseManager: ObservableObject {
             withdrawals = []
         }
     }
+    var weeklyExpenses: [Date: [Expense]] {
+        Dictionary(grouping: expenses) { $0.date.startOfWeek() ?? $0.date }
+    }
+
+    func expenses(forWeekOf date: Date, category: String? = nil) -> [Expense] {
+        let weekStart = date.startOfWeek() ?? date
+        var weekExpenses = weeklyExpenses[weekStart] ?? []
+        if let category = category, !category.isEmpty {
+            weekExpenses = weekExpenses.filter { $0.category == category }
+        }
+        return weekExpenses
+    }
+
+    func totalForWeek(of date: Date, category: String? = nil) -> Double {
+        expenses(forWeekOf: date, category: category)
+            .reduce(0) { $0 + $1.amountYen }
+    }
 }
 
