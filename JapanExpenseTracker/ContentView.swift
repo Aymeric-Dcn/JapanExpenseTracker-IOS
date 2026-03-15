@@ -35,13 +35,15 @@ struct ContentView: View {
                     .background(RoundedRectangle(cornerRadius: 15).fill(Color(.systemGray6)))
                     .shadow(radius: 3)
                     
-                    // Titre
+                    // Title
                     Text("Japan Expense Tracker")
                         .font(.largeTitle)
                         .fontWeight(.heavy)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
                         .padding(.bottom, 10)
                     
-                    // Menu navigation
+                    // Navigation menu
                     VStack(spacing: 15) {
                         NavigationLink(destination: AddExpenseView()) {
                             MenuButton(title: "Add Expense", color: .blue)
@@ -49,17 +51,20 @@ struct ContentView: View {
                         NavigationLink(destination: AddWithdrawalView()) {
                             MenuButton(title: "Add Cash Withdrawal", color: .orange)
                         }
-                        NavigationLink(destination: WeeklyExpensesView()) {
-                            MenuButton(title: "Weekly Expenses", color: .purple)
-                        }
-                        NavigationLink(destination: StatsView()) {
-                            MenuButton(title: "Statistics", color: .green)
+//                        NavigationLink(destination: WeeklyExpensesView()) {
+//                            MenuButton(title: "Weekly Expenses", color: .purple)
+//                        }
+//                        NavigationLink(destination: StatsView()) {
+//                            MenuButton(title: "Statistics", color: .green)
+//                        }
+                        NavigationLink(destination: ExpensesView()){
+                            MenuButton(title: "Expenses", color: .pink)
                         }
                     }
                 }
                 .padding()
             }
-            .navigationTitle("Dashboard")
+            
         }
     }
 }
