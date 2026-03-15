@@ -1,52 +1,33 @@
-//
-//  ExpenseManager.swift
-//  JapanExpenseTracker
-//
-//  Created by Aymeric Duchene on 15/03/2026.
-//
-
 import Foundation
 import Combine
 
 class ExpenseManager: ObservableObject {
     
     @Published var expenses: [Expense] = [] {
-        didSet {
-            saveExpenses()
-        }
+        didSet { saveExpenses() }
     }
+    
     @Published var categories: [String] = []
-
-    func addExpense(expense: Expense) {
-        expenses.append(expense)
-        if !categories.contains(expense.category) {
-            categories.append(expense.category)
-        }
+    
+    @Published var withdrawals: [Double] = [] {
+        didSet { saveWithdrawals() }
     }
     
-    @Published var withdrawals: Double = 0
-    
-    private let savePath: URL = {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("expenses.json")
-    }()
+    private let expensesPath = FileManager.documentsDirectory.appendingPathComponent("expenses.json")
+    private let withdrawalsPath = FileManager.documentsDirectory.appendingPathComponent("withdrawals.json")
     
     init() {
         loadExpenses()
-        categories = Array(Set(expenses.map { $0.category}))
+        loadWithdrawals()
+        categories = Array(Set(expenses.map { $0.category }))
     }
     
-
-    
+    // MARK: - Expenses
     func addExpense(_ expense: Expense) {
         expenses.append(expense)
         if !categories.contains(expense.category) {
             categories.append(expense.category)
         }
-    }
-    
-    func addWithdrawal(amount: Double) {
-        withdrawals += amount
     }
     
     var cashSpent: Double {
@@ -55,33 +36,54 @@ class ExpenseManager: ObservableObject {
             .reduce(0) { $0 + $1.amountYen }
     }
     
-    var cashRemaining: Double {
-        withdrawals - cashSpent
-    }
-    
     var totalSpent: Double {
         expenses.reduce(0) { $0 + $1.amountYen }
     }
     
-    // MARK: - Save
+    // MARK: - Withdrawals
+    func addWithdrawal(_ amount: Double) {
+        withdrawals.append(amount)
+    }
     
+    var cashRemaining: Double {
+        withdrawals.reduce(0, +) - cashSpent
+    }
+    
+    // MARK: - Save / Load
     func saveExpenses() {
         do {
             let data = try JSONEncoder().encode(expenses)
-            try data.write(to: savePath)
+            try data.write(to: expensesPath)
         } catch {
-            print("Savind Error")
+            print("Saving expenses error: \(error)")
         }
     }
     
-    // MARK: - Load
-    
     func loadExpenses() {
         do {
-            let data = try Data(contentsOf: savePath)
+            let data = try Data(contentsOf: expensesPath)
             expenses = try JSONDecoder().decode([Expense].self, from: data)
         } catch {
             expenses = []
         }
     }
+    
+    func saveWithdrawals() {
+        do {
+            let data = try JSONEncoder().encode(withdrawals)
+            try data.write(to: withdrawalsPath)
+        } catch {
+            print("Saving withdrawals error: \(error)")
+        }
+    }
+    
+    func loadWithdrawals() {
+        do {
+            let data = try Data(contentsOf: withdrawalsPath)
+            withdrawals = try JSONDecoder().decode([Double].self, from: data)
+        } catch {
+            withdrawals = []
+        }
+    }
 }
+

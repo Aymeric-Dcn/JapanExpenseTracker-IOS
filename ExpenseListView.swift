@@ -27,6 +27,6 @@ struct ExpenseListView: View {
                     .foregroundColor(.gray)
             }
         }
-        .navigationTitle("Dépenses")
+        .navigationTitle("Expenses")
     }
 }
