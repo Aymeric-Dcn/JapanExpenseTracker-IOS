@@ -112,4 +112,4 @@ The goal was to build a **simple, practical, and lightweight expense tracker** f
 
 ## Author
 
-Aymeric Duchene
+Aymeric Duchêne
