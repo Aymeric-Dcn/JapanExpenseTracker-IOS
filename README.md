@@ -6,6 +6,10 @@
 
 A simple iOS application built with **SwiftUI** to track daily expenses during a trip to Japan.
 
+> This is the version I use on my own iPhone. The actively developed app is
+> [JapanExpenseTracker-Android](https://github.com/Aymeric-Dcn/JapanExpenseTracker-Android),
+> which adds Suica/Pasmo reading over NFC, a live exchange rate, CSV export and CI.
+
 The app was designed to quickly record expenses (cash or card), monitor remaining cash after withdrawals, and visualize spending through simple statistics.
 ## Requirements
 
